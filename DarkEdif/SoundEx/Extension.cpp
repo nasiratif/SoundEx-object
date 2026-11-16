@@ -184,7 +184,7 @@ Extension::Extension(const EDITDATA* const edPtr, void* const objCExtPtr, const 
 		// reader function for your debug item
 		[](Extension* const ext, std::tstring& writeTo)
 		{
-			writeTo = std::to_tstring(SoundEx::GetNumActiveChannels()) + _T("/") + std::to_tstring(AUDIO_NUM_CHANNELS);
+			writeTo = std::to_tstring(SoundEx::GetNumActiveChannels()) + _T("/") + std::to_tstring(SOUNDEX_NUM_CHANNELS);
 		},
 		NULL, 100, NULL
 	);

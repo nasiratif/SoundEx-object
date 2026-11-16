@@ -48,7 +48,7 @@ namespace SoundEx
 
 	struct QueuedChannel
 	{
-		wchar name[AUDIO_MAX_WAVE_NAME_LENGTH + 1];
+		wchar name[SOUNDEX_MAX_WAVE_NAME_LENGTH + 1];
 		int channel;
 		bool loop;
 		float volume;
@@ -225,7 +225,7 @@ DWORD WINAPI AudioMain(LPVOID)
 		LockAudio();
 		if (WaitForSingleObject(restartEvent, 0) == WAIT_OBJECT_0)
 		{
-			for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+			for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 			{
 				auto& channel = audioCtx.channels[i];
 				if (!channel.inUse)
@@ -237,7 +237,7 @@ DWORD WINAPI AudioMain(LPVOID)
 			}
 			if (PlatformInit(true))
 			{
-				for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+				for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 				{
 					auto& channel = audioCtx.channels[i];
 					if (!channel.inUse)
@@ -460,8 +460,8 @@ void SoundEx::PlatformQueueChannel(const wchar* name, int channel, bool loop, fl
 		index = 0;
 
 	auto& pChannel = channelQueue[index];
-	wcsncpy(pChannel.name, name, AUDIO_MAX_WAVE_NAME_LENGTH);
-	pChannel.name[AUDIO_MAX_WAVE_NAME_LENGTH] = L'\0';
+	wcsncpy(pChannel.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
+	pChannel.name[SOUNDEX_MAX_WAVE_NAME_LENGTH] = L'\0';
 	pChannel.channel = channel;
 	pChannel.loop = loop;
 	pChannel.volume = volume;
@@ -703,7 +703,7 @@ uint64 SoundEx::PlatformUpdateChannel(Channel& channel)
 
 		buffer.AudioBytes = channel.vorbisSamplesSize * wave->numChannels * sizeof(int16);
 		buffer.pAudioData = (BYTE*)destBuffer;
-		if (channel.vorbisSamplesSize < AUDIO_STREAM_BUFFER_SAMPLES)
+		if (channel.vorbisSamplesSize < SOUNDEX_STREAM_BUFFER_SAMPLES)
 		{
 			channel.streamEnding = true;
 			buffer.Flags = XAUDIO2_END_OF_STREAM;
@@ -717,7 +717,7 @@ uint64 SoundEx::PlatformUpdateChannel(Channel& channel)
 		voice->SubmitSourceBuffer(&buffer);
 
 		channel.nextVorbisBuffer++;
-		channel.nextVorbisBuffer %= AUDIO_NUM_STREAM_BUFFERS;
+		channel.nextVorbisBuffer %= SOUNDEX_NUM_STREAM_BUFFERS;
 		return currentSample;
 	}
 	}
@@ -792,7 +792,7 @@ finished:
 			Edif::SDK->mV->mvCloseHFile((HANDLE)handle->hFile);
 
 		delete handle;
-		outFile = AUDIO_FILE_ERROR;
+		outFile = SOUNDEX_FILE_ERROR;
 	}
 	return ret;
 }
@@ -800,7 +800,7 @@ finished:
 void SoundEx::FileClose(File file)
 {
 	auto handle = (FileHandle*)file;
-	if (handle != AUDIO_FILE_ERROR)
+	if (handle != SOUNDEX_FILE_ERROR)
 	{
 		if (handle->hFile != HFILE_ERROR)
 			Edif::SDK->mV->mvCloseHFile((HANDLE)handle->hFile);

@@ -21,7 +21,7 @@ bool SoundEx::Init()
 	audioCtx.lastError = AudioError_None;
 	audioCtx.lastChannelPlayed = -1;
 
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 		audioCtx.channels[i].inUse = false;
 
 	return PlatformInit();
@@ -30,7 +30,7 @@ bool SoundEx::Init()
 void SoundEx::Release()
 {
 	LockAudio();
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& channel = audioCtx.channels[i];
 		if (channel.inUse)
@@ -47,7 +47,7 @@ void SoundEx::Release()
 
 void SoundEx::Update()
 {
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& channel = audioCtx.channels[i];
 		if (!channel.inUse)
@@ -69,7 +69,7 @@ void SoundEx::Update()
 			{
 				ReleaseChannel(channel);
 			}
-			else if (bufferQueue < AUDIO_NUM_STREAM_BUFFERS)
+			else if (bufferQueue < SOUNDEX_NUM_STREAM_BUFFERS)
 			{
 				PlatformUpdateChannel(channel);
 			}
@@ -97,7 +97,7 @@ finished:
 
 void SoundEx::LoadWaveData(const wchar* fileName, const wchar* name)
 {
-	if (!(*name) || wcslen(name) > AUDIO_MAX_WAVE_NAME_LENGTH)
+	if (!(*name) || wcslen(name) > SOUNDEX_MAX_WAVE_NAME_LENGTH)
 	{
 		LockAudio();
 		audioCtx.lastError = AudioError_InvalidSoundName;
@@ -111,7 +111,7 @@ void SoundEx::LoadWaveData(const wchar* fileName, const wchar* name)
 	auto error = audioCtx.lastError;
 
 	WaveData wave = {};
-	File file = AUDIO_FILE_ERROR;
+	File file = SOUNDEX_FILE_ERROR;
 
 	for (std::size_t i = 0; i < audioCtx.waves.size(); ++i)
 	{
@@ -179,7 +179,7 @@ void SoundEx::LoadWaveData(const wchar* fileName, const wchar* name)
 
 					FileRead(file, &wfm, chunkSize);
 
-					if ((wfm.format != AUDIO_WAVE_FORMAT_PCM && wfm.format != AUDIO_WAVE_FORMAT_IEEE_FLOAT) || wfm.bitRate % CHAR_BIT || wfm.numChannels > 0xFF)
+					if ((wfm.format != SOUNDEX_WAVE_FORMAT_PCM && wfm.format != SOUNDEX_WAVE_FORMAT_IEEE_FLOAT) || wfm.bitRate % CHAR_BIT || wfm.numChannels > 0xFF)
 					{
 						error = AudioError_WAVLoadFailed;
 						goto finished;
@@ -188,7 +188,7 @@ void SoundEx::LoadWaveData(const wchar* fileName, const wchar* name)
 					wave.bitRate = wfm.bitRate;
 					wave.bitRateBytes = wave.bitRate / CHAR_BIT;
 					wave.numChannels = (uint8)wfm.numChannels;
-					wave.floatPCM = wfm.format == AUDIO_WAVE_FORMAT_IEEE_FLOAT;
+					wave.floatPCM = wfm.format == SOUNDEX_WAVE_FORMAT_IEEE_FLOAT;
 					break;
 				}
 				case AudioFourCC_Data:
@@ -283,8 +283,8 @@ finished:
 	LockAudio();
 	if (error == AudioError_None && wave.samples)
 	{
-		wcsncpy(wave.name, name, AUDIO_MAX_WAVE_NAME_LENGTH);
-		wave.name[AUDIO_MAX_WAVE_NAME_LENGTH - 1] = L'\0';
+		wcsncpy(wave.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
+		wave.name[SOUNDEX_MAX_WAVE_NAME_LENGTH - 1] = L'\0';
 
 		audioCtx.waves.emplace_back(std::make_shared<WaveData>(wave));
 	}
@@ -306,7 +306,7 @@ void SoundEx::UnloadWave(const wchar* name)
 		auto wave = *it;
 		if (wcscmp(name, wave->name) == 0)
 		{
-			for (uint32 k = 0; k < AUDIO_NUM_CHANNELS; ++k)
+			for (uint32 k = 0; k < SOUNDEX_NUM_CHANNELS; ++k)
 			{
 				auto& channel = audioCtx.channels[k];
 				if (!channel.inUse || channel.wave != wave)
@@ -334,7 +334,7 @@ void SoundEx::UnloadAllWaves()
 	LockAudio();
 	audioCtx.lastError = AudioError_None;
 
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& channel = audioCtx.channels[i];
 		if (!channel.inUse)
@@ -368,9 +368,9 @@ void SoundEx::StartChannel(const wchar* name, int channel, bool loop, float volu
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel == AUDIO_CHANNEL_AUTO)
+	if (channel == SOUNDEX_CHANNEL_AUTO)
 	{
-		for (int i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+		for (int i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 		{
 			if (!audioCtx.channels[i].inUse)
 			{
@@ -378,10 +378,10 @@ void SoundEx::StartChannel(const wchar* name, int channel, bool loop, float volu
 				break;
 			}
 		}
-		if (channel == AUDIO_CHANNEL_AUTO)
-			channel = AUDIO_NUM_CHANNELS - 1;
+		if (channel == SOUNDEX_CHANNEL_AUTO)
+			channel = SOUNDEX_NUM_CHANNELS - 1;
 	}
-	else if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	else if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -440,8 +440,8 @@ void SoundEx::StartChannel(const wchar* name, int channel, bool loop, float volu
 		pChannel.vorbis = vorbis;
 		if (pChannel.vorbis)
 		{
-			pChannel.vorbisSamplesCapacity = AUDIO_STREAM_BUFFER_SAMPLES * wave->numChannels;
-			pChannel.vorbisSamples.reset(new int16[pChannel.vorbisSamplesCapacity * AUDIO_NUM_STREAM_BUFFERS]);
+			pChannel.vorbisSamplesCapacity = SOUNDEX_STREAM_BUFFER_SAMPLES * wave->numChannels;
+			pChannel.vorbisSamples.reset(new int16[pChannel.vorbisSamplesCapacity * SOUNDEX_NUM_STREAM_BUFFERS]);
 		}
 		pChannel.vorbisSamplesSize = 0;
 		pChannel.nextVorbisBuffer = 0;
@@ -461,7 +461,7 @@ void SoundEx::StopChannel(int channel)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -508,7 +508,7 @@ void SoundEx::PauseChannel(int channel)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -535,7 +535,7 @@ void SoundEx::ResumeChannel(int channel)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -563,7 +563,7 @@ void SoundEx::StopAllChannels()
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& pChannel = audioCtx.channels[i];
 		if (!pChannel.inUse)
@@ -580,7 +580,7 @@ void SoundEx::PauseAllChannels()
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& pChannel = audioCtx.channels[i];
 		if (!pChannel.inUse)
@@ -598,7 +598,7 @@ void SoundEx::ResumeAllChannels()
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		auto& pChannel = audioCtx.channels[i];
 		if (!pChannel.inUse)
@@ -617,7 +617,7 @@ void SoundEx::SetChannelVolume(int channel, float volume)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -644,7 +644,7 @@ void SoundEx::SetChannelFrequency(int channel, float frequency)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -671,7 +671,7 @@ void SoundEx::SetChannelPan(int channel, float pan)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -699,7 +699,7 @@ void SoundEx::SetChannelPosition(int channel, int sample)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -726,7 +726,7 @@ void SoundEx::SetChannelFXReverb(int channel, const FXReverbParams& params)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -754,7 +754,7 @@ void SoundEx::SetChannelFXPrinceton(int channel, const PrincetonReverbParams& pa
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -782,7 +782,7 @@ void SoundEx::ClearFX(int channel)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -810,7 +810,7 @@ void SoundEx::SetReverbTails(int channel, bool reverbTails)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -838,7 +838,7 @@ int SoundEx::FindChannel(const wchar* name)
 
 	audioCtx.lastError = AudioError_None;
 	int ret = -1;
-	for (int i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (int i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		const auto& channel = audioCtx.channels[i];
 		if (channel.inUse && wcscmp(name, channel.wave->name) == 0)
@@ -955,7 +955,7 @@ bool SoundEx::GetChannelPlaying(int channel)
 
 	bool ret = false;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -983,7 +983,7 @@ bool SoundEx::GetChannelLoop(int channel)
 
 	bool ret = false;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1012,7 +1012,7 @@ float SoundEx::GetChannelVolume(int channel)
 
 	float ret = 0.0f;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1040,7 +1040,7 @@ float SoundEx::GetChannelFrequency(int channel)
 
 	float ret = 0.0f;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1068,7 +1068,7 @@ float SoundEx::GetChannelPan(int channel)
 
 	float ret = 0.0f;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1095,7 +1095,7 @@ int SoundEx::GetChannelPosition(int channel)
 
 	int ret = 0;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1123,7 +1123,7 @@ float SoundEx::GetChannelAmplitude(int channel, int sampleChannel)
 
 	float ret = 0.0f;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1159,15 +1159,15 @@ float SoundEx::GetChannelAmplitude(int channel, int sampleChannel)
 		}
 		case AudioType_Ogg:
 		{
-			auto sample = PlatformGetChannelPosition(pChannel, false) % AUDIO_STREAM_BUFFER_SAMPLES;
+			auto sample = PlatformGetChannelPosition(pChannel, false) % SOUNDEX_STREAM_BUFFER_SAMPLES;
 			auto bufferQueue = GetBufferQueue(pChannel);
-			if (!bufferQueue || bufferQueue > AUDIO_NUM_STREAM_BUFFERS)
+			if (!bufferQueue || bufferQueue > SOUNDEX_NUM_STREAM_BUFFERS)
 			{
 				audioCtx.lastError = AudioError_Error;
 				goto finished;
 			}
 
-			auto bufferIndex = ((AUDIO_NUM_STREAM_BUFFERS - bufferQueue) + pChannel.nextVorbisBuffer) % AUDIO_NUM_STREAM_BUFFERS;
+			auto bufferIndex = ((SOUNDEX_NUM_STREAM_BUFFERS - bufferQueue) + pChannel.nextVorbisBuffer) % SOUNDEX_NUM_STREAM_BUFFERS;
 			auto samples = pChannel.vorbisSamples.get() + bufferIndex * pChannel.vorbisSamplesCapacity;
 			auto samplesEnd = samples + pChannel.vorbisSamplesCapacity;
 
@@ -1189,7 +1189,7 @@ std::shared_ptr<WaveData> SoundEx::GetChannelWave(int channel)
 
 	std::shared_ptr<WaveData> ret;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1218,7 +1218,7 @@ AudioEffect SoundEx::GetChannelFX(int channel)
 
 	auto ret = AudioEffect_None;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1247,7 +1247,7 @@ bool SoundEx::GetChannelReverbTails(int channel)
 
 	bool ret = false;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1276,7 +1276,7 @@ const FXReverbParams* SoundEx::GetChannelFXReverbParams(int channel)
 
 	FXReverbParams* ret = nullptr;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1304,7 +1304,7 @@ const PrincetonReverbParams* SoundEx::GetChannelFXPrincetonParams(int channel)
 
 	PrincetonReverbParams* ret = nullptr;
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -1349,7 +1349,7 @@ int SoundEx::GetNumActiveChannels()
 	LockAudio();
 
 	int ret = 0;
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 		if (audioCtx.channels[i].inUse)
 			ret++;
 
@@ -1438,7 +1438,7 @@ bool SoundEx::ChannelsPlaying()
 {
 	LockAudio();
 	bool ret = false;
-	for (uint32 i = 0; i < AUDIO_NUM_CHANNELS; ++i)
+	for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
 	{
 		const auto& channel = audioCtx.channels[i];
 		if (channel.inUse && channel.playing)

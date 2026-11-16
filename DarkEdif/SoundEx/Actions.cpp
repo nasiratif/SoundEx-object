@@ -19,30 +19,30 @@ FXReverbParams DefaultFXReverbParams()
 PrincetonReverbParams DefaultPrincetonParams()
 {
 	PrincetonReverbParams params;
-	params.wetDryMix = AUDIO_FXPRINCETON_DEFAULT_WET_DRY_MIX;
-	params.reflectionsDelay = AUDIO_FXPRINCETON_DEFAULT_REFLECTIONS_DELAY;
-	params.reverbDelay = AUDIO_FXPRINCETON_DEFAULT_REVERB_DELAY;
-	params.rearDelay = AUDIO_FXPRINCETON_DEFAULT_REAR_DELAY;
-	params.sideDelay = AUDIO_FXPRINCETON_DEFAULT_SIDE_DELAY;
-	params.posLeft = AUDIO_FXPRINCETON_DEFAULT_POSITION;
-	params.posRight = AUDIO_FXPRINCETON_DEFAULT_POSITION;
-	params.posMatrixLeft = AUDIO_FXPRINCETON_DEFAULT_POSITION_MATRIX;
-	params.posMatrixRight = AUDIO_FXPRINCETON_DEFAULT_POSITION_MATRIX;
-	params.earlyDiffusion = AUDIO_FXPRINCETON_DEFAULT_EARLY_DIFFUSION;
-	params.lateDiffusion = AUDIO_FXPRINCETON_DEFAULT_LATE_DIFFUSION;
-	params.lowEQGain = AUDIO_FXPRINCETON_DEFAULT_LOW_EQ_GAIN;
-	params.lowEQCutoff = AUDIO_FXPRINCETON_DEFAULT_LOW_EQ_CUTOFF;
-	params.highEQGain = AUDIO_FXPRINCETON_DEFAULT_HIGH_EQ_GAIN;
-	params.highEQCutoff = AUDIO_FXPRINCETON_DEFAULT_HIGH_EQ_CUTOFF;
-	params.roomFilterFreq = AUDIO_FXPRINCETON_DEFAULT_ROOM_FILTER_FREQ;
-	params.roomFilterMain = AUDIO_FXPRINCETON_DEFAULT_ROOM_FILTER_MAIN;
-	params.roomFilterHF = AUDIO_FXPRINCETON_DEFAULT_ROOM_FILTER_HF;
-	params.reflectionsGain = AUDIO_FXPRINCETON_DEFAULT_REFLECTIONS_GAIN;
-	params.reverbGain = AUDIO_FXPRINCETON_DEFAULT_REVERB_GAIN;
-	params.decayTime = AUDIO_FXPRINCETON_DEFAULT_DECAY_TIME;
-	params.density = AUDIO_FXPRINCETON_DEFAULT_DENSITY;
-	params.roomSize = AUDIO_FXPRINCETON_DEFAULT_ROOM_SIZE;
-	params.disableLateField = AUDIO_FXPRINCETON_DEFAULT_DISABLE_LATE_FIELD;
+	params.wetDryMix = SOUNDEX_FXPRINCETON_DEFAULT_WET_DRY_MIX;
+	params.reflectionsDelay = SOUNDEX_FXPRINCETON_DEFAULT_REFLECTIONS_DELAY;
+	params.reverbDelay = SOUNDEX_FXPRINCETON_DEFAULT_REVERB_DELAY;
+	params.rearDelay = SOUNDEX_FXPRINCETON_DEFAULT_REAR_DELAY;
+	params.sideDelay = SOUNDEX_FXPRINCETON_DEFAULT_SIDE_DELAY;
+	params.posLeft = SOUNDEX_FXPRINCETON_DEFAULT_POSITION;
+	params.posRight = SOUNDEX_FXPRINCETON_DEFAULT_POSITION;
+	params.posMatrixLeft = SOUNDEX_FXPRINCETON_DEFAULT_POSITION_MATRIX;
+	params.posMatrixRight = SOUNDEX_FXPRINCETON_DEFAULT_POSITION_MATRIX;
+	params.earlyDiffusion = SOUNDEX_FXPRINCETON_DEFAULT_EARLY_DIFFUSION;
+	params.lateDiffusion = SOUNDEX_FXPRINCETON_DEFAULT_LATE_DIFFUSION;
+	params.lowEQGain = SOUNDEX_FXPRINCETON_DEFAULT_LOW_EQ_GAIN;
+	params.lowEQCutoff = SOUNDEX_FXPRINCETON_DEFAULT_LOW_EQ_CUTOFF;
+	params.highEQGain = SOUNDEX_FXPRINCETON_DEFAULT_HIGH_EQ_GAIN;
+	params.highEQCutoff = SOUNDEX_FXPRINCETON_DEFAULT_HIGH_EQ_CUTOFF;
+	params.roomFilterFreq = SOUNDEX_FXPRINCETON_DEFAULT_ROOM_FILTER_FREQ;
+	params.roomFilterMain = SOUNDEX_FXPRINCETON_DEFAULT_ROOM_FILTER_MAIN;
+	params.roomFilterHF = SOUNDEX_FXPRINCETON_DEFAULT_ROOM_FILTER_HF;
+	params.reflectionsGain = SOUNDEX_FXPRINCETON_DEFAULT_REFLECTIONS_GAIN;
+	params.reverbGain = SOUNDEX_FXPRINCETON_DEFAULT_REVERB_GAIN;
+	params.decayTime = SOUNDEX_FXPRINCETON_DEFAULT_DECAY_TIME;
+	params.density = SOUNDEX_FXPRINCETON_DEFAULT_DENSITY;
+	params.roomSize = SOUNDEX_FXPRINCETON_DEFAULT_ROOM_SIZE;
+	params.disableLateField = SOUNDEX_FXPRINCETON_DEFAULT_DISABLE_LATE_FIELD;
 	return params;
 }
 
@@ -141,7 +141,7 @@ void Extension::SetSoundFXReverbDiffusion(int channel, float diffusion)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -172,7 +172,7 @@ void Extension::SetSoundFXReverbRoomSize(int channel, float roomSize)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -204,7 +204,7 @@ void Extension::SetSoundFXPrincetonWetDryMix(int channel, float wetDryMix)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -235,7 +235,7 @@ void Extension::SetSoundFXPrincetonReflectionsDelay(int channel, int reflections
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -266,7 +266,7 @@ void Extension::SetSoundFXPrincetonReverbDelay(int channel, int reverbDelay)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -297,7 +297,7 @@ void Extension::SetSoundFXPrincetonRearDelay(int channel, int rearDelay)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -328,7 +328,7 @@ void Extension::SetSoundFXPrincetonSideDelay(int channel, int sideDelay)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -359,7 +359,7 @@ void Extension::SetSoundFXPrincetonPositionLeft(int channel, int posLeft)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -390,7 +390,7 @@ void Extension::SetSoundFXPrincetonPositionRight(int channel, int posRight)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -421,7 +421,7 @@ void Extension::SetSoundFXPrincetonPositionMatrixLeft(int channel, int posMatrix
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -452,7 +452,7 @@ void Extension::SetSoundFXPrincetonPositionMatrixRight(int channel, int posMatri
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -483,7 +483,7 @@ void Extension::SetSoundFXPrincetonEarlyDiffusion(int channel, int earlyDiffusio
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -514,7 +514,7 @@ void Extension::SetSoundFXPrincetonLateDiffusion(int channel, int lateDiffusion)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -545,7 +545,7 @@ void Extension::SetSoundFXPrincetonLowEQGain(int channel, int lowEQGain)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -576,7 +576,7 @@ void Extension::SetSoundFXPrincetonLowEQCutoff(int channel, int lowEQCutoff)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -607,7 +607,7 @@ void Extension::SetSoundFXPrincetonHighEQGain(int channel, int highEQGain)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -638,7 +638,7 @@ void Extension::SetSoundFXPrincetonHighEQCutoff(int channel, int highEQCutoff)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -669,7 +669,7 @@ void Extension::SetSoundFXPrincetonRoomFilterFreq(int channel, float roomFilterF
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -700,7 +700,7 @@ void Extension::SetSoundFXPrincetonRoomFilterMain(int channel, float roomFilterM
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -731,7 +731,7 @@ void Extension::SetSoundFXPrincetonRoomFilterHF(int channel, float roomFilterHF)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -762,7 +762,7 @@ void Extension::SetSoundFXPrincetonReflectionsGain(int channel, float reflection
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -793,7 +793,7 @@ void Extension::SetSoundFXPrincetonReverbGain(int channel, float reverbGain)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -824,7 +824,7 @@ void Extension::SetSoundFXPrincetonDecayTime(int channel, float decayTime)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -855,7 +855,7 @@ void Extension::SetSoundFXPrincetonDensity(int channel, float density)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -886,7 +886,7 @@ void Extension::SetSoundFXPrincetonRoomSize(int channel, float roomSize)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
@@ -917,7 +917,7 @@ void Extension::SetSoundFXPrincetonLateField(int channel, int disableLateField)
 	LockAudio();
 
 	audioCtx.lastError = AudioError_None;
-	if (channel < 0 || channel >= AUDIO_NUM_CHANNELS)
+	if (channel < 0 || channel >= SOUNDEX_NUM_CHANNELS)
 	{
 		audioCtx.lastError = AudioError_InvalidChannel;
 		goto finished;
