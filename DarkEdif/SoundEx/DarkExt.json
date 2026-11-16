@@ -1,0 +1,812 @@
+{
+	// 4-character identifer that uniquely identifies your extension.
+	// Can be letters, numbers, or punctuation, but must be 4 ASCII characters.
+	"Identifier": "SNDX",
+	"Dependencies": "",
+	"US English": {
+		"About": {
+			"Name": "SoundEx object",
+			"Author": "Nassic :)",
+			"Comment": "Audio extension with support for WAVE (.wav) && Ogg Vorbis (.ogg/oga), as well as realtime reverb effects.\nRequires Windows 10 or later. Uses XAudio2. \n(v1.2.2)",
+			"Copyright": "Copyright \u00A9 2026 Nasir 'Nassic' W.",
+			"Help": "Help/SoundEx/SoundEx.html",
+			"URL": "https://community.clickteam.com/user/36199-nasirfoxx/"
+		},
+		"ActionMenu": [
+			[ 0, "Load sound file" ],
+			[ 43, "Unload sound file" ],
+			[ 44, "Unload all sound files" ],
+			"---",
+			[ 1, "Play sound" ],
+			[ 45, "Play sound (extended parameters)" ],
+			[ 2, "Stop channel" ],
+			"---",
+			[ 3, "Pause channel" ],
+			[ 4, "Resume channel" ],
+			"---",
+			[ 5, "Stop all channels" ],
+			[ 6, "Pause all channels" ],
+			[ 7, "Resume all channels" ],
+			[ 46, "Clear sound queue" ],
+			"---",
+			[ 8, "Set master volume" ],
+			"---",
+			[ 9, "Set channel volume" ],
+			[ 10, "Set channel frequency" ],
+			[ 11, "Set channel pan" ],
+			[ 12, "Set channel position" ],
+			[
+				"Effects",
+				[ 13, "Set XAPO FXReverb channel effect" ],
+				[ 14, "Set Princeton Digital Reverb channel effect" ],
+				"---",
+				[
+					"Parameters",
+					[
+						"XAPO FXReverb",
+						[ 15, "Set diffusion" ],
+						[ 16, "Set room size" ]
+					],
+					[
+						"Princeton Digital Reverb",
+						[ 17, "Set wet dry mix" ],
+						[ 18, "Set reflections delay" ],
+						[ 19, "Set reverb delay" ],
+						[ 20, "Set rear delay" ],
+						[ 21, "Set side delay" ],
+						[ 22, "Set left-side position" ],
+						[ 23, "Set right-side position" ],
+						[ 24, "Set left-side matrix position" ],
+						[ 25, "Set right-side matrix position" ],
+						[ 26, "Set early diffusion" ],
+						[ 27, "Set late diffusion" ],
+						[ 28, "Set low EQ gain" ],
+						[ 29, "Set low EQ cutoff" ],
+						[ 30, "Set high EQ gain" ],
+						[ 31, "Set high EQ cutoff" ],
+						[ 32, "Set room filter frequency" ],
+						[ 33, "Set main room filter" ],
+						[ 34, "Set high-frequency room filter" ],
+						[ 35, "Set reflections gain" ],
+						[ 36, "Set reverb gain" ],
+						[ 37, "Set decay time" ],
+						[ 38, "Set density" ],
+						[ 39, "Set room size" ],
+						[ 40, "Set late-field reflection calculations flag" ]
+					],
+					"---"
+				],
+				"---",
+				[ 41, "Clear channel effect" ],
+				"---",
+				[ 42, "Enable/disable reverb tails" ]
+			]
+		],
+		"ConditionMenu": [
+			[ 0, "Has an error occurred since the last action/condition/expression?" ],
+			"---",
+			[ 1, "Is any channel playing?" ],
+			"---",
+			[ 2, "Is a specific channel playing?" ],
+			[ 3, "Is a specific channel looping?" ],
+			[ 4, "Is a specific channel using reverb tails?" ],
+			"---",
+			[ 5, "Is a specific channel using any effects?" ],
+			[ 6, "Is a specific channel using XAPO FXReverb?" ],
+			[ 7, "Is a specific channel using Princeton Digital Reverb?" ]
+		],
+		"ExpressionMenu": [
+			[ 0, "Get last error" ],
+			"---",
+			[ 1, "Get sound length" ],
+			[ 2, "Get sound sample rate" ],
+			[ 3, "Get sound bitrate" ],
+			[ 4, "Get sound number of channels" ],
+			[ 40, "Get WAV amplitude" ],
+			"---",
+			[ 5, "Get master volume" ],
+			"---",
+			[ 6, "Get channel volume" ],
+			[ 7, "Get channel frequency" ],
+			[ 8, "Get channel pan" ],
+			[ 9, "Get channel position" ],
+			[ 41, "Get channel amplitude" ],
+			[ 10, "Get channel sound name" ],
+			[
+				"Effects",
+				[
+					"XAPO FXReverb",
+					[ 11, "Get diffusion" ],
+					[ 12, "Get room size" ]
+				],
+				[
+					"Princeton Digital Reverb",
+					[ 13, "Get wet dry mix" ],
+					[ 14, "Get reflections delay" ],
+					[ 15, "Get reverb delay" ],
+					[ 16, "Get rear delay" ],
+					[ 17, "Get side delay" ],
+					[ 18, "Get left-side position" ],
+					[ 19, "Get right-side position" ],
+					[ 20, "Get left-side matrix position" ],
+					[ 21, "Get right-side matrix position" ],
+					[ 22, "Get early diffusion" ],
+					[ 23, "Get late diffusion" ],
+					[ 24, "Get low EQ gain" ],
+					[ 25, "Get low EQ cutoff" ],
+					[ 26, "Get high EQ gain" ],
+					[ 27, "Get high EQ cutoff" ],
+					[ 28, "Get room filter frequency" ],
+					[ 29, "Get main room filter" ],
+					[ 30, "Get high-frequency room filter" ],
+					[ 31, "Get reflections gain" ],
+					[ 32, "Get reverb gain" ],
+					[ 33, "Get decay time" ],
+					[ 34, "Get density" ],
+					[ 35, "Get room size" ],
+					[ 36, "Get late-field reflection calculations flag" ]
+				]
+			],
+			"---",
+			[ 37, "Get last channel played" ],
+			[ 38, "Find channel" ],
+			"---",
+			[ 42, "Get number of loaded sound files" ],
+			[ 39, "Get number of active channels" ]
+		],
+		"Actions": [
+			{
+				"Title": "Load sound file %0 under name %1",
+				"Parameters": [
+					[ "Filename", "Enter the filename of this sound" ],
+					[ "Text", "Enter a name for this sound (maximum length is 64 characters, this is the name you'll use to play it)" ]
+				]
+			},
+			{
+				"Title": "Play sound %0 on channel %1, loop %2",
+				"Parameters": [
+					[ "Text", "Enter the name of the sound you loaded via \"Load sound file\" (case sensitive)" ],
+					[ "Integer", "Channel number (ranges from 0-63, -1 for automatic channel)" ],
+					[ "Integer", "Loop this sound? (0 = no, 1 = yes)" ]
+				]
+			},
+			{
+				"Title": "Stop channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Pause channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Resume channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Stop all channels"
+			},
+			{
+				"Title": "Pause all channels"
+			},
+			{
+				"Title": "Resume all channels"
+			},
+			{
+				"Title": "Set master volume to %0",
+				"Parameters": [
+					[ "Float", "Volume (ranges from 0.0-1.0, higher values will create distortion)" ]
+				]
+			},
+			{
+				"Title": "Set channel %0's volume to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Volume (ranges from 0.0-1.0, higher values will create distortion)" ]
+				]
+			},
+			{
+				"Title": "Set channel %0's frequency to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Frequency (starts at 1.0, higher values create higher pitch, lower values create lower pitches)" ]
+				]
+			},
+			{
+				"Title": "Set channel %0's pan to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Pan (ranges from -1.0 to 1.0, -1.0 being far left, 0.0 being center, 1.0 being far right)" ]
+				]
+			},
+			{
+				"Title": "Set channel %0's position to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Sample position" ]
+				]
+			},
+			{
+				"Title": "Set XAPO FXReverb effect on channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Set Princeton reverb effect on channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Set XAPO FXReverb diffusion on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Diffusion (ranges from 0.0-1.0, default: 0.5)" ]
+				]
+			},
+			{
+				"Title": "Set XAPO FXReverb room size on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Room size (ranges from 0.0001-1.0, default: 0.5)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton wet dry mix on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Wet dry mix (ranges from 0.0-100.0, default: 100.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton reflections delay on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Reflections delay (ranges from 0-300, default: 5)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton reverb delay on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Reverb delay (ranges from 0-85 ms, default: 5)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton rear delay on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Rear delay (ranges from 0-5 ms, default: 5)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton side delay on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Side delay (ranges from 0-5 ms, default: 5)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton left-side position on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Left-side position (ranges from 0-30, default: 6)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton right-side position on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Right-side position (ranges from 0-30, default: 6)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton left-side matrix position on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Left-side matrix position (ranges from 0-30, default: 27)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton right-side matrix position on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Right-side matrix position (ranges from 0-30, default: 27)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton early diffusion on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Early diffusion (ranges from 0-15, default: 8)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton late diffusion on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Late diffusion (ranges from 0-15, default: 8)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton low EQ gain on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Low EQ gain (ranges from 0-12, default: 8)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton low EQ cutoff on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Low EQ cutoff (ranges from 0-9, default: 4)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton high EQ gain on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "High EQ gain (ranges from 0-8, default: 8)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton high EQ cutoff on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "High EQ cutoff (ranges from 0-14, default: 4)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton room filter frequency on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Room filter frequency (ranges from 20.0-20000.0 hz, default: 5000.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton main room filter on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Main room filter (ranges from -100.0-0.0 db, default: 0.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton high room filter frequency on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "High room filter frequency (ranges from -100.0-0.0 db, default: 0.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton reflections gain on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Reflections gain (ranges from -100.0-20.0 db, default: 0.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton reverb gain on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Reverb gain (ranges from -100.0-20.0 db, default: 0.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton decay time on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Decay time (minimum: 0.1, default: 1.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton density on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Density (ranges from 0.0-100.0%, default: 100.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton room size on channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Float", "Room size (ranges from 1.0-100.0 ft, default: 100.0)" ]
+				]
+			},
+			{
+				"Title": "Set Princeton late-field calculations flag on channel %0 to (disabled: %1)",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Disable late field reflection calculations? (0 = no, 1 = yes, default: 0, can save CPU usage)" ]
+				]
+			},
+			{
+				"Title": "Clear effect of channel %0",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "Set reverb tails of channel %0 to %1",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Reverb tails (0 = disable, 1 = enable)" ]
+				]
+			},
+			{
+				"Title": "Unload sound file %0",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "Unload all sound files"
+			},
+			{
+				"Title": "Play sound (ex) %0 on channel %1, loop %2, volume %3, frequency %4, pan %5 after %6 ms",
+				"Parameters": [
+					[ "Text", "Enter the name of the sound you loaded via \"Load sound file\" (case sensitive)" ],
+					[ "Integer", "Channel number (ranges from 0-63, -1 for automatic channel)" ],
+					[ "Integer", "Loop this sound? (0 = no, 1 = yes)" ],
+					[ "Float", "Volume (ranges from 0.0-1.0, higher values will create distortion)" ],
+					[ "Float", "Frequency (starts at 1.0, higher values create higher pitch, lower values create lower pitches)" ],
+					[ "Float", "Pan (ranges from -1.0 to 1.0, -1.0 being far left, 0.0 being center, 1.0 being far right)" ],
+					[ "Integer", "Delay time (ms)" ]
+				]
+			},
+			{
+				"Title": "Clear sound queue"
+			}
+		],
+		"Conditions": [
+			{
+				"Title": "%o : Has an error occurred since the last action?",
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is any channel playing?",
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 playing?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 looping?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 using reverb tails?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 using any effects?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 using XAPO FXReverb?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			},
+			{
+				"Title": "%o : Is channel %0 using Princeton Reverb?",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				],
+				"Triggered": false
+			}
+		],
+		"Expressions": [
+			{
+				"Title": "LastErrorEx$(",
+				"Returns": "Text"
+			},
+			{
+				"Title": "SampleLengthEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "SampleRateEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "SampleBitrateEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "SampleChannelsEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "MasterVolumeEx(",
+				"Returns": "Float"
+			},
+			{
+				"Title": "ChannelVolumeEx(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "ChannelFrequencyEx(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "ChannelPanEx(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "ChannelPositionEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "ChannelSoundEx$(",
+				"Returns": "Text",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "FXReverbDiffusion(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "FXReverbRoomSize(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonWetDryMix(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonReflectionsDelay(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonReverbDelay(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonRearDelay(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonSideDelay(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonPositionLeft(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonPositionRight(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonPositionMatrixLeft(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonPositionMatrixRight(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonEarlyDiffusion(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonLateDiffusion(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonLowEQGain(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonLowEQCutoff(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonHighEQGain(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonHighEQCutoff(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonRoomFilterFrequency(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonRoomFilterMain(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonRoomFilterHF(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonReflectionsGain(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonReverbGain(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonDecayTime(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonDensity(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonRoomSize(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "PrincetonDisableLateField(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Integer", "Channel number" ]
+				]
+			},
+			{
+				"Title": "LastChannelPlayedEx(",
+				"Returns": "Integer"
+			},
+			{
+				"Title": "FindChannelEx(",
+				"Returns": "Integer",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ]
+				]
+			},
+			{
+				"Title": "NumActiveChannelsEx(",
+				"Returns": "Integer"
+			},
+			{
+				"Title": "WAVAmplitudeEx(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Text", "Sound name (case sensitive)" ],
+					[ "Integer", "Sample position" ],
+					[ "Integer", "Sample channel (e.g, 0 = left, 1 = right)" ]
+				]
+			},
+			{
+				"Title": "ChannelAmplitudeEx(",
+				"Returns": "Float",
+				"Parameters": [
+					[ "Integer", "Channel number" ],
+					[ "Integer", "Sample channel (e.g, 0 = left, 1 = right)" ]
+				]
+			},
+			{
+				"Title": "NumSoundFilesEx(",
+				"Returns": "Integer"
+			}
+		],
+		"Properties": [
+		]
+	}
+}

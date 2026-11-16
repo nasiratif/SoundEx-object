@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundEx.Shared", "SoundEx.Shared.vcxitems", "{D80A8E35-0167-4A0D-BDCD-A8F41DFB459E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundEx.Windows", "SoundEx.Windows.vcxproj", "{EE449205-2398-483E-965B-0EC64AA8A4CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Unicode|x86 = Debug Unicode|x86
+		Debug|x86 = Debug|x86
+		Edittime Unicode|x86 = Edittime Unicode|x86
+		Edittime|x86 = Edittime|x86
+		Runtime Unicode|x86 = Runtime Unicode|x86
+		Runtime|x86 = Runtime|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Debug Unicode|x86.ActiveCfg = Debug Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Debug Unicode|x86.Build.0 = Debug Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Debug|x86.ActiveCfg = Debug|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Debug|x86.Build.0 = Debug|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Edittime Unicode|x86.ActiveCfg = Edittime Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Edittime Unicode|x86.Build.0 = Edittime Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Edittime|x86.ActiveCfg = Edittime|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Edittime|x86.Build.0 = Edittime|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Runtime Unicode|x86.ActiveCfg = Runtime Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Runtime Unicode|x86.Build.0 = Runtime Unicode|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Runtime|x86.ActiveCfg = Runtime|Win32
+		{EE449205-2398-483E-965B-0EC64AA8A4CA}.Runtime|x86.Build.0 = Runtime|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {931688EC-0571-494D-ACE4-BA6747772C8E}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SoundEx.Shared.vcxitems*{d80a8e35-0167-4a0d-bdcd-a8f41dfb459e}*SharedItemImports = 9
+		SoundEx.Shared.vcxitems*{ee449205-2398-483e-965b-0ec64aa8a4ca}*SharedItemImports = 4
+		SoundEx.Shared.vcxitems*{d80a8e35-0167-4a0d-bdcd-a8f41dfb459e}*SharedItemsImports = 9
+		SoundEx.Shared.vcxitems*{ee449205-2398-483e-965b-0ec64aa8a4ca}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal
