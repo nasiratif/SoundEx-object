@@ -113,9 +113,9 @@ void SoundEx::LoadWaveData(const wchar* fileName, const wchar* name)
 	WaveData wave = {};
 	File file = SOUNDEX_FILE_ERROR;
 
-	for (std::size_t i = 0; i < audioCtx.waves.size(); ++i)
+	for (const auto& existingWave : audioCtx.waves)
 	{
-		if (wcscmp(name, audioCtx.waves[i]->name) == 0)
+		if (wcscmp(name, existingWave->name) == 0)
 		{
 			UnlockAudio();
 			goto finished;
@@ -303,7 +303,7 @@ void SoundEx::UnloadWave(const wchar* name)
 	audioCtx.lastError = AudioError_UnknownSoundName;
 	for (auto it = audioCtx.waves.begin(); it != audioCtx.waves.end(); ++it)
 	{
-		auto wave = *it;
+		const auto& wave = *it;
 		if (wcscmp(name, wave->name) == 0)
 		{
 			for (uint32 k = 0; k < SOUNDEX_NUM_CHANNELS; ++k)
