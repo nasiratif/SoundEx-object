@@ -279,7 +279,7 @@ finished:
 	LockAudio();
 	if (error == AudioError_None && wave.samples)
 	{
-		wcsncpy(wave.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
+		std::wcsncpy(wave.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
 		wave.name[SOUNDEX_MAX_WAVE_NAME_LENGTH - 1] = L'\0';
 
 		audioCtx.waves.emplace_back(std::make_shared<WaveData>(wave));

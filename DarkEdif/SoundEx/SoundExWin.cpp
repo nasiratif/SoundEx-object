@@ -464,7 +464,7 @@ void SoundEx::PlatformQueueChannel(const wchar* name, int channel, bool loop, fl
 		index = 0;
 
 	auto& pChannel = channelQueue[index];
-	wcsncpy(pChannel.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
+	std::wcsncpy(pChannel.name, name, SOUNDEX_MAX_WAVE_NAME_LENGTH);
 	pChannel.name[SOUNDEX_MAX_WAVE_NAME_LENGTH] = L'\0';
 	pChannel.channel = channel;
 	pChannel.loop = loop;
