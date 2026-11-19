@@ -7,7 +7,7 @@
 		"About": {
 			"Name": "SoundEx object",
 			"Author": "Nassic :)",
-			"Comment": "Audio extension with support for WAVE (.wav) && Ogg Vorbis (.ogg/oga), as well as realtime reverb effects.\nRequires Windows 10 or later. Uses XAudio2. \n(v1.2.2)",
+			"Comment": "Audio extension with support for WAVE (.wav) && Ogg Vorbis (.ogg/oga), as well as realtime reverb effects.\nRequires Windows 10 or later. Uses XAudio2. \n(v1.2.3)",
 			"Copyright": "Copyright \u00A9 2026 Nasir 'Nassic' W.",
 			"Help": "Help/SoundEx/SoundEx.html",
 			"URL": "https://community.clickteam.com/user/36199-nasirfoxx/"

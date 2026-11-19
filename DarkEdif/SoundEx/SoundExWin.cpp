@@ -19,6 +19,7 @@
 #define AS_CALLBACK(c) ((VoiceCallback*)(c))
 
 // The maximum number of sound channels that can be queued at once
+// The last event is reserved as a close event, hence the subtraction
 #define MAX_QUEUE_CHANNELS (MAXIMUM_WAIT_OBJECTS - 1)
 // -----
 

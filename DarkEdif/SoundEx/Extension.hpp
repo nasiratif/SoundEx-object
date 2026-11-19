@@ -23,7 +23,7 @@ public:
 	Edif::Runtime Runtime;
 
 	static const int MinimumBuild = 296;
-	static const int Version = 6;
+	static const int Version = 7;
 
 	// Warning: OEFLAGS/OEPREFS cannot be freely modified when you have used them in MFAs.
 	static constexpr OEFLAGS OEFLAGS = OEFLAGS::NONE;
