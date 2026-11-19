@@ -34,9 +34,13 @@ namespace SoundEx
 	HANDLE queueThread = INVALID_HANDLE_VALUE;
 	DWORD queueThreadID = NULL;
 
+	// Signaled to wake up a thread
 	HANDLE wakeEvent = INVALID_HANDLE_VALUE;
+	// Signaled when a thread should be closed
 	HANDLE closeEvent = INVALID_HANDLE_VALUE;
+	// Signaled when the audio engine must be restarted
 	HANDLE restartEvent = INVALID_HANDLE_VALUE;
+	// Signaled when the main thread is trying to get the position of a channel, which may cause issues if the audio thread is also trying to access/modify the sound position
 	HANDLE getPositionEvent = INVALID_HANDLE_VALUE;
 	HANDLE channelTimers[MAXIMUM_WAIT_OBJECTS];
 
@@ -152,7 +156,7 @@ void SetPan(IXAudio2SourceVoice* voice, uint32 numChannels, float pan)
 	}
 
 	float panMatrix[8];
-	memset(panMatrix, 0x0, sizeof(panMatrix));
+	std::memset(panMatrix, 0x0, sizeof(panMatrix));
 	switch (numChannels)
 	{
 	case 1:
@@ -225,9 +229,8 @@ DWORD WINAPI AudioMain(LPVOID)
 		LockAudio();
 		if (WaitForSingleObject(restartEvent, 0) == WAIT_OBJECT_0)
 		{
-			for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
+			for (auto& channel : audioCtx.channels)
 			{
-				auto& channel = audioCtx.channels[i];
 				if (!channel.inUse)
 					continue;
 
@@ -237,9 +240,8 @@ DWORD WINAPI AudioMain(LPVOID)
 			}
 			if (PlatformInit(true))
 			{
-				for (uint32 i = 0; i < SOUNDEX_NUM_CHANNELS; ++i)
+				for (auto& channel : audioCtx.channels)
 				{
-					auto& channel = audioCtx.channels[i];
 					if (!channel.inUse)
 						continue;
 
@@ -338,16 +340,16 @@ finished:
 		restartEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 		getPositionEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-		memset(channelTimers, 0xFF, sizeof(channelTimers));
-		memset(channelQueue, 0x0, sizeof(channelQueue));
-		for (uint32 i = 0; i < MAX_QUEUE_CHANNELS; ++i)
+		std::memset(channelTimers, 0xFF, sizeof(channelTimers));
+		std::memset(channelQueue, 0x0, sizeof(channelQueue));
+		for (auto& channelTimer : channelTimers)
 		{
 			auto accessRights = TIMER_MODIFY_STATE | SYNCHRONIZE;
 			auto timer = CreateWaitableTimerEx(NULL, NULL, CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, accessRights);
 			if (timer == INVALID_HANDLE_VALUE)
 				timer = CreateWaitableTimer(NULL, FALSE, NULL);
 
-			channelTimers[i] = timer;
+			channelTimer = timer;
 		}
 		channelTimers[MAXIMUM_WAIT_OBJECTS - 1] = closeEvent;
 
@@ -363,7 +365,8 @@ void SoundEx::PlatformRelease()
 	{
 		SetEvent(closeEvent);
 		SetEvent(wakeEvent);
-
+		// Wait for the threads to close now that we signaled the events for that.
+		// If for some reason it ends up taking too long we'll forcibly terminate the threads:
 		if (WaitForSingleObject(audioThread, 500) == WAIT_TIMEOUT)
 			TerminateThread(audioThread, 1);
 		if (WaitForSingleObject(queueThread, 500) == WAIT_TIMEOUT)
@@ -726,7 +729,7 @@ uint64 SoundEx::PlatformUpdateChannel(Channel& channel)
 }
 
 
-int SoundEx::PlatformGetChannelPosition(Channel& channel, bool sampleStart)
+int SoundEx::PlatformGetChannelPosition(const Channel& channel, bool sampleStart)
 {
 	if (!channel.pAudio)
 		return 0;
@@ -748,7 +751,7 @@ int SoundEx::PlatformGetChannelPosition(Channel& channel, bool sampleStart)
 }
 
 
-uint32 SoundEx::GetBufferQueue(Channel& channel)
+uint32 SoundEx::GetBufferQueue(const Channel& channel)
 {
 	if (!channel.pAudio)
 		return 0;

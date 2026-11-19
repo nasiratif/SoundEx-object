@@ -1,11 +1,10 @@
 #pragma once
 #include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <memory>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #define STB_VORBIS_HEADER_ONLY
 #include <stb_vorbis.c>
 #include <algorithm>
@@ -350,9 +349,9 @@ namespace SoundEx
 
 	uint64 PlatformUpdateChannel(Channel& channel);
 
-	int PlatformGetChannelPosition(Channel& channel, bool sampleStart = true);
+	int PlatformGetChannelPosition(const Channel& channel, bool sampleStart = true);
 	 
-	uint32 GetBufferQueue(Channel& channel);
+	uint32 GetBufferQueue(const Channel& channel);
 
 	const wchar* GetLastAudioError();
 

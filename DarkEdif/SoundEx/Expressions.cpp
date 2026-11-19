@@ -5,7 +5,7 @@ using namespace SoundEx;
 
 const TCHAR* Extension::GetLastACEError()
 {
-	return Runtime.CopyString(GetLastAudioError());
+	return GetLastAudioError();
 }
 
 
